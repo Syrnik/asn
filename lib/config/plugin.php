@@ -1,6 +1,15 @@
 <?php
+/**
+ * Automatic SKU ID Generator plugin for Shop-Script 6
+ *
+ * @author Serge Rodovnichenko <serge@syrnik.com>
+ * @version 1.0.0
+ * @copyright Serge Rodovnichenko, 2015
+ * @license http://www.webasyst.com/terms/#eula Webasyst
+ * @package asn.config
+ */
 return array(
-    'name'     => 'Automatic SKU ID Generator',
+    'name'     => 'Генератор имен артикулов',
     'icon'     => 'img/asn.gif',
     'version'  => '1.0.0',
     'vendor'   => '670917',
