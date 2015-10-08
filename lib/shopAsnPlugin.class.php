@@ -24,7 +24,7 @@ class shopAsnPlugin extends shopPlugin
                 $skus = array();
                 $view = wa()->getView();
                 $template = $this->getSettings('template');
-                if(empty($template)) {
+                if (empty($template)) {
                     $template = '{$sku_id}';
                 }
 
@@ -32,7 +32,7 @@ class shopAsnPlugin extends shopPlugin
                     $skus[$key] = $sku;
                     if (isset($sku['sku'], $sku['id']) && !strlen($sku['sku'])) {
                         $view->assign('sku_id', $sku['id']);
-                        $sku['sku'] = $view->fetch('string:'.$template);
+                        $sku['sku'] = $view->fetch('string:' . $template);
                         $new_sku = $Sku->update($sku['id'], $sku);
                         if ($new_sku) {
                             $skus[$key] = $sku;
