@@ -10,7 +10,7 @@
  */
 return array(
     'name'     => 'Генератор имен артикулов',
-    'icon'     => 'img/asn.gif',
+    'img'     => 'img/asn.png',
     'version'  => '1.1.0',
     'vendor'   => '670917',
     'handlers' =>
