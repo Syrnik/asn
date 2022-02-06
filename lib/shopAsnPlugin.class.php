@@ -66,7 +66,7 @@ class shopAsnPlugin extends shopPlugin
      */
     public function hookProductDuplicate($params): void
     {
-        if (!$this->getSettings('use')) return;
+        if (!$this->getSettings('use') || !$this->getSettings('regen_on_duplicate')) return;
 
         /** @var shopProduct $duplicate */
         if ($duplicate = $params['duplicate'] ?? null) {
