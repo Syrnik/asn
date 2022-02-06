@@ -1,9 +1,8 @@
 <?php
 /**
- * Automatic SKU ID Generator plugin for Shop-Script 6
+ * Automatic SKU ID Generator plugin for Shop-Script 6+
  *
  * @author Serge Rodovnichenko <serge@syrnik.com>
- * @version 1.1.0
  * @copyright Serge Rodovnichenko, 2015-2022
  * @license http://www.webasyst.com/terms/#eula Webasyst
  * @package asn
@@ -57,6 +56,55 @@ class shopAsnPlugin extends shopPlugin
                 }
                 $product['skus'] = $skus;
             }
+        }
+    }
+
+    /**
+     * @EventHandler product_duplicate
+     * @param $params
+     * @return void
+     */
+    public function hookProductDuplicate($params): void
+    {
+        if (!$this->getSettings('use')) return;
+
+        /** @var shopProduct $duplicate */
+        if ($duplicate = $params['duplicate'] ?? null) {
+            try {
+                $view = wa('shop')->getView();
+            } catch (waException $e) {
+                return;
+            }
+            $template = trim($this->getSettings('template')) ?: '{$sku_id}';
+            $skus = $duplicate->skus;
+            array_walk($skus, function (&$sku) use ($view, $template) {
+                $view->assign('sku_id', $sku['id']);
+                try {
+                    $sku['sku'] = $view->fetch("string:$template");
+                } catch (SmartyException|waException $e) {
+                    $this->logException($e);
+                }
+            });
+            try {
+                $duplicate->save(['skus' => $skus]);
+            } catch (waException $e) {
+                $this->logException($e);
+            }
+        }
+    }
+
+    /**
+     * @param Throwable $e
+     * @param string $message
+     * @return void
+     */
+    protected function logException(Throwable $e, string $message = "Error updating ID of SKU. Data: {msg}"): void
+    {
+        try {
+            if (wa()->getConfig()::isDebug())
+                waLog::log(str_replace('{msg}', $e->getMessage(), $message));
+        } catch (waException $e) {
+            //do nothing
         }
     }
 }
